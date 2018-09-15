@@ -147,7 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Economy.cs" />
-    <Compile Include="Commands\Helpers.cs" />
+    <Compile Include="Commands\BankerModuleBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

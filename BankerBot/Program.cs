@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Sheets.v4;
-using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Services;
+using Google.Apis.Sheets.v4;
 using Google.Apis.Util.Store;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace RPGBot
 {
@@ -36,8 +30,6 @@ namespace RPGBot
 
 		private Program()
 		{
-
-
 			//Discord API
 			_client = new DiscordSocketClient();
 			_client.Log += Logger;
