@@ -13,10 +13,43 @@ namespace BankerBot.Commands
 {
 	public class Economy : BankerModuleBase
 	{
-		
+
 		public Economy(SheetsService sheets)
 		{
 			_sheetsService = sheets;
+		}
+
+		[Command("Gold")]
+		public async Task Gold(string characterName)
+		{
+			// Read from Sheet
+			SpreadsheetsResource.ValuesResource.GetRequest request =
+				   _sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _characterRecordRange);
+
+			ValueRange response = request.Execute();
+			IList<IList<Object>> values = response.Values;
+
+			//Find the first row
+			var row = values.FirstOrDefault(x => (string)x[0] == characterName);
+			if (row == null)
+			{
+				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
+			}
+			await ReplyAsync(String.Format("{0} has {1} gp to their name.", characterName, (string)row[3]));
+		}
+
+		[Command("Gold")]
+		public async Task Gold()
+		{
+			// Get User
+			var user = (IGuildUser)Context.Message.Author;
+			await Gold(GetCharacterName(user));
+		}
+
+		[Command("Gold")]
+		public async Task Gold(SocketGuildUser user)
+		{			
+			await Gold(GetCharacterName(user));
 		}
 
 		[Command("SpendGold")]

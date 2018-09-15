@@ -13,6 +13,7 @@ namespace BankerBot.Commands
 	{
 		protected const String _spreadsheetId = "17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs";
 		protected const String _logBookRange = "'Logbook'!A2:I";
+		protected const string _characterRecordRange = "'Character Record'!A2:E";
 
 		protected SheetsService _sheetsService;
 
