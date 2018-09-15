@@ -146,6 +146,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Checkpoints.cs" />
     <Compile Include="Commands\Economy.cs" />
     <Compile Include="Commands\BankerModuleBase.cs" />
     <Compile Include="Program.cs" />

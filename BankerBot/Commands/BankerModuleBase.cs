@@ -24,7 +24,7 @@ namespace BankerBot.Commands
 			if (!string.IsNullOrWhiteSpace(charcterName)) // Character
 				obj.Add(charcterName);
 			else
-				obj.Add(getCharacterName(user));
+				obj.Add(GetCharacterName(user));
 
 			obj.Add("BankerBot (" + user.Username + ")"); // DM
 			obj.Add(DateTime.Today.ToShortDateString()); // Date
@@ -40,7 +40,7 @@ namespace BankerBot.Commands
 
 		protected string GetCharacterName(IGuildUser user)
 		{
-			return getCharacterName(user.Nickname);
+			return GetCharacterName(user.Nickname);
 		}
 
 		protected string GetCharacterName(string nickname)
@@ -53,12 +53,12 @@ namespace BankerBot.Commands
 			// Define request parameters.
 
 			SpreadsheetsResource.ValuesResource.GetRequest getRequest =
-				sheetsService.Spreadsheets.Values.Get(SpreadsheetId, LogBookRange);
+				sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _logBookRange);
 
 			ValueRange getResponse = getRequest.Execute();
 			IList<IList<Object>> getValues = getResponse.Values;
 
-			if (getValues == null) return LogBookRange;
+			if (getValues == null) return _logBookRange;
 
 			// Get new range
 			int currentCount = getValues.Count() + 1;
