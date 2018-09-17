@@ -17,7 +17,7 @@ namespace BankerBot.Commands
 
 		protected SheetsService _sheetsService;
 
-		protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string note = "", string resurected = "")
+		protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string note = "", string resurected = "")
 		{
 
 			IList<Object> obj = new List<Object>();
@@ -33,6 +33,7 @@ namespace BankerBot.Commands
 			obj.Add(checkpoints); // Checkpoints
 			obj.Add(lootpoints); // Lootpoints
 			obj.Add(gold); // Gold
+			obj.Add(essence); //Essence
 			obj.Add(note); // Notes
 			obj.Add(resurected); // Resurected
 

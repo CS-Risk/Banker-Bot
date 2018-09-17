@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace BankerBot.Commands
 {
-	public class Economy : BankerModuleBase
+	public class Essence : BankerModuleBase
 	{
 
-		public Economy(SheetsService sheets)
+		public Essence(SheetsService sheets)
 		{
 			_sheetsService = sheets;
 		}
 
-		[Command("Gold")]
-		public async Task Gold(string characterName)
+		[Command("Essence")]
+		public async Task CurrentEssence(string characterName)
 		{
 			// Read from Sheet
 			SpreadsheetsResource.ValuesResource.GetRequest request =
@@ -38,29 +38,29 @@ namespace BankerBot.Commands
 			await ReplyAsync(String.Format("{0} has {1} gp to their name.", characterName, (string)row[3]));
 		}
 
-		[Command("Gold")]
-		public async Task Gold()
+		[Command("Essence")]
+		public async Task CurrentEssence()
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
-			await Gold(GetCharacterName(user));
+			await CurrentEssence(GetCharacterName(user));
 		}
 
-		[Command("Gold")]
-		public async Task Gold(SocketGuildUser user)
+		[Command("Essence")]
+		public async Task CurrentEssence(SocketGuildUser user)
 		{			
-			await Gold(GetCharacterName(user));
+			await CurrentEssence(GetCharacterName(user));
 		}
 
-		[Command("SpendGold")]
-		public async Task SpendGold(decimal gold, string note = "")
+		[Command("SpendEssence")]
+		public async Task SpendEssence(decimal Essence, string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, gold: gold.ToString()));
+			newRecords.Add(CreateRow(user, essence: Essence.ToString()));
 
 			// Update Sheet
 			SpreadsheetsResource.ValuesResource.AppendRequest request =
@@ -70,17 +70,17 @@ namespace BankerBot.Commands
 			var response = request.Execute();
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0} spent {1} gp. {2}", GetCharacterName(user), gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0} spent {1} Essence. {2}", GetCharacterName(user), Essence.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
-		[Command("GiveGold")]
-		public async Task GiveGold(SocketGuildUser recipient, decimal gold, string note = "")
+		[Command("GiveEssence")]
+		public async Task GiveEssence(SocketGuildUser recipient, decimal Essence, string note = "")
 		{
-			await GiveGold(GetCharacterName(recipient.Nickname), gold, note);
+			await GiveEssence(GetCharacterName(recipient.Nickname), Essence, note);
 		}
 
-		[Command("GiveGold")]
-		public async Task GiveGold(string recipient, decimal gold, string note = "")
+		[Command("GiveEssence")]
+		public async Task GiveEssence(string recipient, decimal Essence, string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
@@ -89,10 +89,10 @@ namespace BankerBot.Commands
 			List<IList<Object>> newRecords = new List<IList<Object>>();
 
 			// Create disbursing record
-			newRecords.Add(CreateRow(user, gold: (gold * -1).ToString(), note: note));
+			newRecords.Add(CreateRow(user, essence: (Essence * -1).ToString(), note: note));
 
 			// Create receiving record
-			newRecords.Add(CreateRow(user, charcterName: recipient, gold: gold.ToString(), note: note));
+			newRecords.Add(CreateRow(user, charcterName: recipient, essence: Essence.ToString(), note: note));
 
 			// Update Sheet
 			SpreadsheetsResource.ValuesResource.AppendRequest request =
@@ -102,24 +102,24 @@ namespace BankerBot.Commands
 			var response = request.ExecuteAsync();
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0} gave {1} {2} gp. {3}", GetCharacterName(user), recipient, gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0} gave {1} {2} Essence. {3}", GetCharacterName(user), recipient, Essence.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
-		[Command("UpdateGold")]
-		public async Task UpdateGold(SocketGuildUser character, decimal gold, string note = "")
+		[Command("UpdateEssence")]
+		public async Task UpdateEssence(SocketGuildUser character, decimal Essence, string note = "")
 		{
-			await UpdateGold(GetCharacterName(character.Nickname), gold, note);
+			await UpdateEssence(GetCharacterName(character.Nickname), Essence, note);
 		}
 
-		[Command("UpdateGold")]
-		public async Task UpdateGold(string character, decimal gold, string note = "")
+		[Command("UpdateEssence")]
+		public async Task UpdateEssence(string character, decimal Essence, string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
 			DMOnly(user);
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, charcterName: character, gold: gold.ToString(), note: note));
+			newRecords.Add(CreateRow(user, charcterName: character, essence: Essence.ToString(), note: note));
 
 			// Update Sheet
 			SpreadsheetsResource.ValuesResource.AppendRequest request =
@@ -129,7 +129,7 @@ namespace BankerBot.Commands
 			var response = request.ExecuteAsync();
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0}'s gold value changed by {1}. {2}", character, gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0}'s Essence value changed by {1}. {2}", character, Essence.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 	}
 }

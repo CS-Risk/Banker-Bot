@@ -18,14 +18,14 @@ namespace BankerBot.Commands
 			_sheetsService = sheets;
 		}
 
-		[Command("GiveCheckpoints")]
-		public async Task GiveCheckpoints(SocketGuildUser character, int checkpoints, string note = "")
+		[Command("UpdateCheckpoints")]
+		public async Task UpdateCheckpoints(SocketGuildUser character, int checkpoints, string note = "")
 		{
-			await GiveCheckpoints(GetCharacterName(character.Nickname), checkpoints, note);
+			await UpdateCheckpoints(GetCharacterName(character.Nickname), checkpoints, note);
 		}
 
-		[Command("GiveCheckpoints")]
-		public async Task GiveCheckpoints(string character, int checkpoints, string note = "")
+		[Command("UpdateCheckpoints")]
+		public async Task UpdateCheckpoints(string character, int checkpoints, string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
 			DMOnly(user);
