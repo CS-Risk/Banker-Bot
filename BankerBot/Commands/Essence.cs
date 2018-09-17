@@ -35,7 +35,7 @@ namespace BankerBot.Commands
 			{
 				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
 			}
-			await ReplyAsync(String.Format("{0} has {1} gp to their name.", characterName, (string)row[3]));
+			await ReplyAsync(String.Format("{0} has {1} Essence to their name.", characterName, (string)row[4]));
 		}
 
 		[Command("Essence")]
