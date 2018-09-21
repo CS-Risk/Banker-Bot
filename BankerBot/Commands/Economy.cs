@@ -35,7 +35,7 @@ namespace BankerBot.Commands
 			{
 				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
 			}
-			await ReplyAsync(String.Format("{0} has {1} gp to their name.", characterName, (string)row[3]));
+			await ReplyAsync(String.Format("{0} has {1} gp.", characterName, (string)row[3]));
 		}
 
 		[Command("Gold")]
@@ -63,11 +63,7 @@ namespace BankerBot.Commands
 			newRecords.Add(CreateRow(user, gold: gold.ToString()));
 
 			// Update Sheet
-			SpreadsheetsResource.ValuesResource.AppendRequest request =
-				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
-			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.INSERTROWS;
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-			var response = request.Execute();
+			updateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} spent {1} gp. {2}", GetCharacterName(user), gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -95,11 +91,7 @@ namespace BankerBot.Commands
 			newRecords.Add(CreateRow(user, charcterName: recipient, gold: gold.ToString(), note: note));
 
 			// Update Sheet
-			SpreadsheetsResource.ValuesResource.AppendRequest request =
-				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
-			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.INSERTROWS;
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-			var response = request.ExecuteAsync();
+			updateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} gave {1} {2} gp. {3}", GetCharacterName(user), recipient, gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -122,14 +114,35 @@ namespace BankerBot.Commands
 			newRecords.Add(CreateRow(user, charcterName: character, gold: gold.ToString(), note: note));
 
 			// Update Sheet
-			SpreadsheetsResource.ValuesResource.AppendRequest request =
-				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
-			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.OVERWRITE;
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-			var response = request.ExecuteAsync();
+			updateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0}'s gold value changed by {1}. {2}", character, gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+		}
+
+		[Command("StartingGold")]
+		public async Task StartingGold(SocketGuildUser character, decimal gold, string note = "")
+		{
+			await StartingGold(GetCharacterName(character.Nickname), gold, note);
+		}
+
+		[Command("StartingGold")]
+		public async Task StartingGold(string character, decimal gold, string note = "")
+		{
+			var user = (IGuildUser)Context.Message.Author;
+
+			if (gold > 250)
+				throw new Exception(string.Format("Starting gold can not be above 250 gp."));
+
+			// Create record
+			List<IList<Object>> newRecords = new List<IList<Object>>();
+			newRecords.Add(CreateRow(user, charcterName: character, gold: gold.ToString(), note: note));
+
+			// Update Sheet
+			updateSheet(newRecords);
+
+			// Reply in Discord
+			await ReplyAsync(string.Format("{0}'s starting gold set to {1} gp. {2}", character, gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 	}
 }

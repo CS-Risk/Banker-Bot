@@ -35,11 +35,7 @@ namespace BankerBot.Commands
 			newRecords.Add(CreateRow(user, charcterName: character, checkpoints: checkpoints.ToString(), note: note));
 
 			// Update Sheet
-			SpreadsheetsResource.ValuesResource.AppendRequest request =
-				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
-			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.OVERWRITE;
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-			var response = request.ExecuteAsync();
+			updateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("Awarded {0} {1} checkpoint(s). {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));

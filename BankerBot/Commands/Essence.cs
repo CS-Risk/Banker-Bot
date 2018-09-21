@@ -35,7 +35,7 @@ namespace BankerBot.Commands
 			{
 				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
 			}
-			await ReplyAsync(String.Format("{0} has {1} Essence to their name.", characterName, (string)row[4]));
+			await ReplyAsync(String.Format("{0} has {1} Essence.", characterName, (string)row[4]));
 		}
 
 		[Command("Essence")]
@@ -63,11 +63,7 @@ namespace BankerBot.Commands
 			newRecords.Add(CreateRow(user, essence: Essence.ToString()));
 
 			// Update Sheet
-			SpreadsheetsResource.ValuesResource.AppendRequest request =
-				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
-			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.INSERTROWS;
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-			var response = request.Execute();
+			updateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} spent {1} Essence. {2}", GetCharacterName(user), Essence.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -95,11 +91,7 @@ namespace BankerBot.Commands
 			newRecords.Add(CreateRow(user, charcterName: recipient, essence: Essence.ToString(), note: note));
 
 			// Update Sheet
-			SpreadsheetsResource.ValuesResource.AppendRequest request =
-				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
-			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.INSERTROWS;
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-			var response = request.ExecuteAsync();
+			updateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} gave {1} {2} Essence. {3}", GetCharacterName(user), recipient, Essence.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -122,11 +114,7 @@ namespace BankerBot.Commands
 			newRecords.Add(CreateRow(user, charcterName: character, essence: Essence.ToString(), note: note));
 
 			// Update Sheet
-			SpreadsheetsResource.ValuesResource.AppendRequest request =
-				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
-			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.OVERWRITE;
-			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-			var response = request.ExecuteAsync();
+			updateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0}'s Essence value changed by {1}. {2}", character, Essence.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));

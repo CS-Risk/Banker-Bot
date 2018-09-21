@@ -13,7 +13,7 @@ namespace BankerBot.Commands
 	{
 		protected const String _spreadsheetId = "17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs";
 		protected const String _logBookRange = "'Logbook'!A2:I";
-		protected const string _characterRecordRange = "'Character Record'!A2:E";
+		protected const string _characterRecordRange = "'Character Record'!A2:F";
 
 		protected SheetsService _sheetsService;
 
@@ -85,6 +85,15 @@ namespace BankerBot.Commands
 			String newRange = "'Logbook'!A" + currentCount + ":I";
 
 			return newRange;
+		}
+
+		public void updateSheet(IList<IList<Object>> newRecords)
+		{
+			SpreadsheetsResource.ValuesResource.AppendRequest request =
+				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
+			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.OVERWRITE;
+			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
+			var response = request.ExecuteAsync();
 		}
 
 		protected void DMOnly(IGuildUser user)
