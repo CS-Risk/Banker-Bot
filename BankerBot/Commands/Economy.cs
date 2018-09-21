@@ -121,13 +121,14 @@ namespace BankerBot.Commands
 		}
 
 		[Command("StartingGold")]
-		public async Task StartingGold(SocketGuildUser character, decimal gold, string note = "")
+		public async Task StartingGold(decimal gold)
 		{
-			await StartingGold(GetCharacterName(character.Nickname), gold, note);
+			var user = (IGuildUser)Context.Message.Author;
+			await StartingGold(GetCharacterName(user), gold);
 		}
 
 		[Command("StartingGold")]
-		public async Task StartingGold(string character, decimal gold, string note = "")
+		public async Task StartingGold(string character, decimal gold)
 		{
 			var user = (IGuildUser)Context.Message.Author;
 
@@ -136,13 +137,13 @@ namespace BankerBot.Commands
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, charcterName: character, gold: gold.ToString(), note: note));
+			newRecords.Add(CreateRow(user, charcterName: character, gold: gold.ToString(), note: "Starting Gold"));
 
 			// Update Sheet
 			updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0}'s starting gold set to {1} gp. {2}", character, gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0}'s starting gold set to {1} gp.", character, gold.ToString()));
 		}
 	}
 }
