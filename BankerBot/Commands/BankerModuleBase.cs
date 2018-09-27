@@ -11,13 +11,14 @@ namespace BankerBot.Commands
 {
 	public class BankerModuleBase : ModuleBase
 	{
-		protected const String _spreadsheetId = "17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs";
-		protected const String _logBookRange = "'Logbook'!A2:I";
-		protected const string _characterRecordRange = "'Character Record'!A2:F";
+		protected const string _spreadsheetId = "17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs";
+		protected const string _logBookRange = "'Logbook'!A2:J";
+		protected const string _characterRecordRange = "'Character Record'!A2:G";
+		protected const string _characterListRange = "'Character List'!A2:O";
 
 		protected SheetsService _sheetsService;
 
-		protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string note = "", string resurected = "")
+		protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string scrap ="", string note = "", string resurected = "")
 		{
 
 			IList<Object> obj = new List<Object>();
@@ -34,6 +35,7 @@ namespace BankerBot.Commands
 			obj.Add(lootpoints); // Lootpoints
 			obj.Add(gold); // Gold
 			obj.Add(essence); //Essence
+			obj.Add(scrap); // Scrap
 			obj.Add(note); // Notes
 			obj.Add(resurected); // Resurected
 
