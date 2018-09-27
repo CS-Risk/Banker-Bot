@@ -7,6 +7,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Util.Store;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -21,6 +22,7 @@ namespace RPGBot
 		private readonly IServiceCollection _map = new ServiceCollection();
 		private IServiceProvider _services;
 		private string _token = "NDkwMTc1OTI0MjI3Mjc2ODAx.Dn1frg.d0eoR5GvOgqku778imX-AqF823g";
+		private readonly char prefix = ConfigurationManager.AppSettings["prefix"].ToCharArray()[0];
 
 		static string[] Scopes = { SheetsService.Scope.Spreadsheets };
 		static string ApplicationName = "Google Sheets API .NET Quickstart";
@@ -103,7 +105,7 @@ namespace RPGBot
 			int pos = 0;
 			// Replace the '!' with whatever character
 			// you want to prefix your commands with.
-			if (msg.HasCharPrefix('?', ref pos))
+			if (msg.HasCharPrefix(prefix, ref pos))
 			{
 				// Create a Command Context.
 				var context = new SocketCommandContext(_client, msg);

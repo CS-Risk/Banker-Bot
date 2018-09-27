@@ -48,15 +48,18 @@ namespace BankerBot.Commands
 
 		[Command("Gold")]
 		public async Task Gold(SocketGuildUser user)
-		{			
+		{
 			await Gold(GetCharacterName(user));
 		}
 
 		[Command("SpendGold")]
-		public async Task SpendGold(decimal gold, string note = "")
+		public async Task SpendGold(decimal gold, params String[] noteArray)
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
+
+			// Set Note
+			string note = string.Join(" ", noteArray);
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
@@ -70,16 +73,19 @@ namespace BankerBot.Commands
 		}
 
 		[Command("GiveGold")]
-		public async Task GiveGold(SocketGuildUser recipient, decimal gold, string note = "")
+		public async Task GiveGold(SocketGuildUser recipient, decimal gold, params String[] noteArray)
 		{
-			await GiveGold(GetCharacterName(recipient.Nickname), gold, note);
+			await GiveGold(GetCharacterName(recipient.Nickname), gold, noteArray);
 		}
 
 		[Command("GiveGold")]
-		public async Task GiveGold(string recipient, decimal gold, string note = "")
+		public async Task GiveGold(string recipient, decimal gold, params String[] noteArray)
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
+
+			// Set Note
+			string note = string.Join(" ", noteArray);
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
@@ -98,15 +104,16 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateGold")]
-		public async Task UpdateGold(SocketGuildUser character, decimal gold, string note = "")
+		public async Task UpdateGold(SocketGuildUser character, decimal gold, params String[] noteArray)
 		{
-			await UpdateGold(GetCharacterName(character.Nickname), gold, note);
+			await UpdateGold(GetCharacterName(character.Nickname), gold, noteArray);
 		}
 
 		[Command("UpdateGold")]
-		public async Task UpdateGold(string character, decimal gold, string note = "")
+		public async Task UpdateGold(string character, decimal gold, params String[] noteArray)
 		{
 			var user = (IGuildUser)Context.Message.Author;
+			string note = string.Join(" ", noteArray);
 			DMOnly(user);
 
 			// Create record
@@ -117,7 +124,7 @@ namespace BankerBot.Commands
 			updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0}'s gold value changed by {1}. {2}", character, gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0}'s gold value changed by {1}. {2}", character, gold.ToString(), (!string.IsNullOrWhiteSpace(note) ? string.Format("({0})", note) : "")));
 		}
 
 		[Command("StartingGold")]

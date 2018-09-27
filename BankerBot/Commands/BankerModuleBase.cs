@@ -3,6 +3,7 @@ using Discord.Commands;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,10 +12,11 @@ namespace BankerBot.Commands
 {
 	public class BankerModuleBase : ModuleBase
 	{
-		protected const string _spreadsheetId = "17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs";
-		protected const string _logBookRange = "'Logbook'!A2:J";
-		protected const string _characterRecordRange = "'Character Record'!A2:G";
-		protected const string _characterListRange = "'Character List'!A2:O";
+		//protected const string _spreadsheetId = "17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs";
+		protected readonly string _spreadsheetId = ConfigurationManager.AppSettings["spreadsheetId"];
+		protected readonly string _logBookRange = "'Logbook'!A2:J";
+		protected readonly string _characterRecordRange = "'Character Record'!A2:G";
+		protected readonly string _characterListRange = "'Character List'!A2:O";
 
 		protected SheetsService _sheetsService;
 
