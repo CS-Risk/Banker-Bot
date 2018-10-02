@@ -12,7 +12,8 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <NuGetPackageImportStamp></NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Checkpoints.cs" />
+    <Compile Include="Commands\Scrap.cs" />
     <Compile Include="Commands\Essence.cs" />
     <Compile Include="Commands\Economy.cs" />
     <Compile Include="Commands\BankerModuleBase.cs" />

@@ -13,6 +13,7 @@ namespace BankerBot.Commands
 {
 	public class Essence : BankerModuleBase
 	{
+		private readonly int rowIndex = 4;
 
 		public Essence(SheetsService sheets)
 		{
@@ -35,7 +36,7 @@ namespace BankerBot.Commands
 			{
 				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
 			}
-			await ReplyAsync(String.Format("{0} has {1} Essence.", characterName, (string)row[4]));
+			await ReplyAsync(String.Format("{0} has {1} Essence.", characterName, (string)row[rowIndex]));
 		}
 
 		[Command("Essence")]
