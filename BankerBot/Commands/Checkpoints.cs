@@ -45,19 +45,31 @@ namespace BankerBot.Commands
 		public async Task BeBetter()
 		{
 			var user = (IGuildUser)Context.Message.Author;
-			await UpdateCheckpoints(GetCharacterName(user), 1, "Be Better - " + DateTime.Now.ToString("MMMM"));
+			await BeBetter(GetCharacterName(user));
 		}
 
 		[Command("BeBetter")]
 		public async Task BeBetter(SocketGuildUser user)
 		{
-			await UpdateCheckpoints(GetCharacterName(user), 1, "Be Better - " + DateTime.Now.ToString("MMMM"));
+			await BeBetter(GetCharacterName(user));
 		}
 
 		[Command("BeBetter")]
 		public async Task BeBetter(string character)
 		{
-			await UpdateCheckpoints(character, 1, "Be Better - " + DateTime.Now.ToString("MMMM"));
+			var user = (IGuildUser)Context.Message.Author;
+			var checkpoints = 1;
+			var note = "Be Better - " + DateTime.Now.ToString("MMMM");
+
+			// Create record
+			List<IList<Object>> newRecords = new List<IList<Object>>();
+			newRecords.Add(CreateRow(user, charcterName: character, checkpoints: checkpoints.ToString(), note: note));
+
+			// Update Sheet
+			updateSheet(newRecords);
+
+			// Reply in Discord
+			await ReplyAsync(string.Format("Awarded {0} {1} checkpoint(s). {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
 

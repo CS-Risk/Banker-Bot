@@ -99,9 +99,9 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateEssence")]
-		public async Task UpdateEssence(SocketGuildUser character, decimal Essence, [Remainder]string note = "")
+		public async Task UpdateEssence(SocketGuildUser user, decimal Essence, [Remainder]string note = "")
 		{
-			await UpdateEssence(GetCharacterName(character.Nickname), Essence, note);
+			await UpdateEssence(GetCharacterName(user.Nickname), Essence, note);
 		}
 
 		[Command("UpdateEssence")]

@@ -98,9 +98,9 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateGold")]
-		public async Task UpdateGold(SocketGuildUser character, decimal gold, [Remainder]string note = "")
+		public async Task UpdateGold(SocketGuildUser user, decimal gold, [Remainder]string note = "")
 		{
-			await UpdateGold(GetCharacterName(character.Nickname), gold, note);
+			await UpdateGold(GetCharacterName(user.Nickname), gold, note);
 		}
 
 		[Command("UpdateGold")]
@@ -125,6 +125,12 @@ namespace BankerBot.Commands
 		public async Task StartingGold(decimal gold)
 		{
 			var user = (IGuildUser)Context.Message.Author;
+			await StartingGold(GetCharacterName(user), gold);
+		}
+
+		[Command("StartingGold")]
+		public async Task StartingGold(SocketGuildUser user, decimal gold)
+		{
 			await StartingGold(GetCharacterName(user), gold);
 		}
 

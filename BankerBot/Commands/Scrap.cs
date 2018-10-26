@@ -99,9 +99,9 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateScrap")]
-		public async Task UpdateScrap(SocketGuildUser character, decimal Scrap, [Remainder]string note = "")
+		public async Task UpdateScrap(SocketGuildUser user, decimal Scrap, [Remainder]string note = "")
 		{
-			await UpdateScrap(GetCharacterName(character.Nickname), Scrap, note);
+			await UpdateScrap(GetCharacterName(user.Nickname), Scrap, note);
 		}
 
 		[Command("UpdateScrap")]
