@@ -101,8 +101,7 @@ namespace BankerBot.Commands
 		}
 
 		protected void DMOnly(IGuildUser user)
-		{
-			
+		{			
 			var dmRole = Context.Guild.Roles.FirstOrDefault(x => x.Name == "DM");
 			if (!user.RoleIds.Contains(dmRole.Id))
 			{

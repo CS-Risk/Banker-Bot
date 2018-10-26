@@ -53,13 +53,10 @@ namespace BankerBot.Commands
 		}
 
 		[Command("SpendGold")]
-		public async Task SpendGold(decimal gold, params String[] noteArray)
+		public async Task SpendGold(decimal gold, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
-
-			// Set Note
-			string note = string.Join(" ", noteArray);
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
@@ -73,19 +70,16 @@ namespace BankerBot.Commands
 		}
 
 		[Command("GiveGold")]
-		public async Task GiveGold(SocketGuildUser recipient, decimal gold, params String[] noteArray)
+		public async Task GiveGold(SocketGuildUser recipient, decimal gold, [Remainder]string note = "")
 		{
-			await GiveGold(GetCharacterName(recipient.Nickname), gold, noteArray);
+			await GiveGold(GetCharacterName(recipient.Nickname), gold, note);
 		}
 
 		[Command("GiveGold")]
-		public async Task GiveGold(string recipient, decimal gold, params String[] noteArray)
+		public async Task GiveGold(string recipient, decimal gold, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
-
-			// Set Note
-			string note = string.Join(" ", noteArray);
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
@@ -104,16 +98,16 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateGold")]
-		public async Task UpdateGold(SocketGuildUser character, decimal gold, params String[] noteArray)
+		public async Task UpdateGold(SocketGuildUser character, decimal gold, [Remainder]string note = "")
 		{
-			await UpdateGold(GetCharacterName(character.Nickname), gold, noteArray);
+			await UpdateGold(GetCharacterName(character.Nickname), gold, note);
 		}
 
 		[Command("UpdateGold")]
-		public async Task UpdateGold(string character, decimal gold, params String[] noteArray)
+		public async Task UpdateGold(string character, decimal gold, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
-			string note = string.Join(" ", noteArray);
+
 			DMOnly(user);
 
 			// Create record

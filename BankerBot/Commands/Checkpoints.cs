@@ -19,13 +19,13 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateCheckpoints")]
-		public async Task UpdateCheckpoints(SocketGuildUser character, int checkpoints, string note = "")
+		public async Task UpdateCheckpoints(SocketGuildUser character, int checkpoints, [Remainder]string note = "")
 		{
 			await UpdateCheckpoints(GetCharacterName(character.Nickname), checkpoints, note);
 		}
 
 		[Command("UpdateCheckpoints")]
-		public async Task UpdateCheckpoints(string character, int checkpoints, string note = "")
+		public async Task UpdateCheckpoints(string character, int checkpoints, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
 			DMOnly(user);

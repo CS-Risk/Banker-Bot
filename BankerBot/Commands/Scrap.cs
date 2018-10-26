@@ -54,7 +54,7 @@ namespace BankerBot.Commands
 		}
 
 		[Command("SpendScrap")]
-		public async Task SpendScrap(decimal Scrap, string note = "")
+		public async Task SpendScrap(decimal Scrap, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
@@ -71,13 +71,13 @@ namespace BankerBot.Commands
 		}
 
 		[Command("GiveScrap")]
-		public async Task GiveScrap(SocketGuildUser recipient, decimal Scrap, string note = "")
+		public async Task GiveScrap(SocketGuildUser recipient, decimal Scrap, [Remainder]string note = "")
 		{
 			await GiveScrap(GetCharacterName(recipient.Nickname), Scrap, note);
 		}
 
 		[Command("GiveScrap")]
-		public async Task GiveScrap(string recipient, decimal Scrap, string note = "")
+		public async Task GiveScrap(string recipient, decimal Scrap, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
@@ -99,13 +99,13 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateScrap")]
-		public async Task UpdateScrap(SocketGuildUser character, decimal Scrap, string note = "")
+		public async Task UpdateScrap(SocketGuildUser character, decimal Scrap, [Remainder]string note = "")
 		{
 			await UpdateScrap(GetCharacterName(character.Nickname), Scrap, note);
 		}
 
 		[Command("UpdateScrap")]
-		public async Task UpdateScrap(string character, decimal Scrap, string note = "")
+		public async Task UpdateScrap(string character, decimal Scrap, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
 			DMOnly(user);

@@ -54,7 +54,7 @@ namespace BankerBot.Commands
 		}
 
 		[Command("SpendEssence")]
-		public async Task SpendEssence(decimal Essence, string note = "")
+		public async Task SpendEssence(decimal Essence, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
@@ -71,13 +71,13 @@ namespace BankerBot.Commands
 		}
 
 		[Command("GiveEssence")]
-		public async Task GiveEssence(SocketGuildUser recipient, decimal Essence, string note = "")
+		public async Task GiveEssence(SocketGuildUser recipient, decimal Essence, [Remainder]string note = "")
 		{
 			await GiveEssence(GetCharacterName(recipient.Nickname), Essence, note);
 		}
 
 		[Command("GiveEssence")]
-		public async Task GiveEssence(string recipient, decimal Essence, string note = "")
+		public async Task GiveEssence(string recipient, decimal Essence, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
@@ -99,13 +99,13 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateEssence")]
-		public async Task UpdateEssence(SocketGuildUser character, decimal Essence, string note = "")
+		public async Task UpdateEssence(SocketGuildUser character, decimal Essence, [Remainder]string note = "")
 		{
 			await UpdateEssence(GetCharacterName(character.Nickname), Essence, note);
 		}
 
 		[Command("UpdateEssence")]
-		public async Task UpdateEssence(string character, decimal Essence, string note = "")
+		public async Task UpdateEssence(string character, decimal Essence, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
 			DMOnly(user);
