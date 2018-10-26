@@ -19,9 +19,9 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateCheckpoints")]
-		public async Task UpdateCheckpoints(SocketGuildUser character, int checkpoints, [Remainder]string note = "")
+		public async Task UpdateCheckpoints(SocketGuildUser user, int checkpoints, [Remainder]string note = "")
 		{
-			await UpdateCheckpoints(GetCharacterName(character.Nickname), checkpoints, note);
+			await UpdateCheckpoints(GetCharacterName(user.Nickname), checkpoints, note);
 		}
 
 		[Command("UpdateCheckpoints")]
@@ -39,6 +39,25 @@ namespace BankerBot.Commands
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("Awarded {0} {1} checkpoint(s). {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+		}
+
+		[Command("BeBetter")]
+		public async Task BeBetter()
+		{
+			var user = (IGuildUser)Context.Message.Author;
+			await UpdateCheckpoints(GetCharacterName(user), 1, "Be Better - " + DateTime.Now.ToString("MMMM"));
+		}
+
+		[Command("BeBetter")]
+		public async Task BeBetter(SocketGuildUser user)
+		{
+			await UpdateCheckpoints(GetCharacterName(user), 1, "Be Better - " + DateTime.Now.ToString("MMMM"));
+		}
+
+		[Command("BeBetter")]
+		public async Task BeBetter(string character)
+		{
+			await UpdateCheckpoints(character, 1, "Be Better - " + DateTime.Now.ToString("MMMM"));
 		}
 
 

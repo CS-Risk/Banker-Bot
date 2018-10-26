@@ -35,7 +35,7 @@ namespace BankerBot.Commands
 		public async Task Character(SocketGuildUser user)
 		{
 			await ReplyAsync(GetCharacterName(user));
-		}
+		}	
 
 	}
 }
