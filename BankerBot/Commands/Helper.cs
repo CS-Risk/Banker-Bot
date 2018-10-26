@@ -21,7 +21,20 @@ namespace BankerBot.Commands
 		[Command("Logbook")]
 		public async Task Logbook()
 		{			
-			await ReplyAsync(_sheetsService.BaseUri);
+			await ReplyAsync("<https://docs.google.com/spreadsheets/d/17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs/edit?usp=sharing>");
+		}
+
+		[Command("Character")]
+		public async Task Character()
+		{
+			var user = (IGuildUser)Context.Message.Author;
+			await ReplyAsync(GetCharacterName(user));
+		}
+
+		[Command("Character")]
+		public async Task Character(SocketGuildUser user)
+		{
+			await ReplyAsync(GetCharacterName(user));
 		}
 
 	}
