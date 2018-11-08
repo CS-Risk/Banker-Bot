@@ -13,7 +13,7 @@ namespace BankerBot.Commands
 {
 	public class Scrap : BankerModuleBase
 	{
-		private readonly int rowIndex = 5;
+		private readonly int columnIndex = 5;
 
 		public Scrap(SheetsService sheets)
 		{
@@ -36,7 +36,7 @@ namespace BankerBot.Commands
 			{
 				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
 			}
-			await ReplyAsync(String.Format("{0} has {1} Scrap.", characterName, (string)row[rowIndex]));
+			await ReplyAsync(String.Format("{0} has {1} Scrap.", characterName, (string)row[columnIndex]));
 		}
 
 		[Command("Scrap")]
@@ -99,16 +99,23 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateScrap")]
-		public async Task UpdateScrap(SocketGuildUser user, decimal Scrap, [Remainder]string note = "")
+		public async Task UpdateScrap(decimal scrap, [Remainder]string note = "")
 		{
-			await UpdateScrap(GetCharacterName(user.Nickname), Scrap, note);
+			// Get User
+			var user = (IGuildUser)Context.Message.Author;
+			await UpdateScrap(GetCharacterName(user), scrap, note);
+		}
+
+		[Command("UpdateScrap")]
+		public async Task UpdateScrap(SocketGuildUser user, decimal scrap, [Remainder]string note = "")
+		{
+			await UpdateScrap(GetCharacterName(user.Nickname), scrap, note);
 		}
 
 		[Command("UpdateScrap")]
 		public async Task UpdateScrap(string character, decimal Scrap, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
-			DMOnly(user);
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
