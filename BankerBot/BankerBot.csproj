@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Checkpoints.cs" />
+    <Compile Include="Commands\Factions.cs" />
     <Compile Include="Commands\Helper.cs" />
     <Compile Include="Commands\Lootpoints.cs" />
     <Compile Include="Commands\Scrap.cs" />

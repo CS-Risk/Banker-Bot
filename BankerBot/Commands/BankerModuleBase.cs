@@ -14,13 +14,14 @@ namespace BankerBot.Commands
 	{
 		//protected const string _spreadsheetId = "17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs";
 		protected readonly string _spreadsheetId = ConfigurationManager.AppSettings["spreadsheetId"];
-		protected readonly string _logBookRange = "'Logbook'!A2:J";
-		protected readonly string _characterRecordRange = "'Character Record'!A2:G";
-		protected readonly string _characterListRange = "'Character List'!A2:O";
+		protected const string _logBookRange = "'Logbook'!A2:K";
+		protected const string _factionRange = "'Faction Challenge'!A2:E";
+		protected const string _characterRecordRange = "'Character Record'!A2:G";
+		protected const string _characterListRange = "'Character List'!A2:O";
 
 		protected SheetsService _sheetsService;
 
-		protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string scrap ="", string note = "", string resurected = "")
+		protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string scrap = "", string note = "", string resurected = "")
 		{
 
 			IList<Object> obj = new List<Object>();
@@ -44,6 +45,23 @@ namespace BankerBot.Commands
 			return obj;
 		}
 
+		protected IList<Object> CreateFactionRow(IGuildUser user, string charcterName = "", string faction = "", string date = "", string points = "", string note = "")
+		{
+
+			IList<Object> obj = new List<Object>();
+
+			if (!string.IsNullOrWhiteSpace(charcterName)) // Character
+				obj.Add(charcterName);
+			else
+				obj.Add(GetCharacterName(user));
+			obj.Add(faction);
+			obj.Add(DateTime.Today.ToShortDateString()); // Date
+			obj.Add(points); // points
+			obj.Add(note); // Notes
+
+			return obj;
+		}
+
 		protected string GetCharacterName(IGuildUser user)
 		{
 			return GetCharacterName(user.Nickname);
@@ -54,54 +72,38 @@ namespace BankerBot.Commands
 			return Regex.Match(nickname, @"\(([^)]*)\)").Groups[1].Value;
 		}
 
-		public string GetNewRange(SheetsService sheetsService)
+		public string GetNewRange(string range)
 		{
 			// Define request parameters.
-
 			SpreadsheetsResource.ValuesResource.GetRequest getRequest =
-				sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _logBookRange);
+				_sheetsService.Spreadsheets.Values.Get(_spreadsheetId, range);
 
 			ValueRange getResponse = getRequest.Execute();
 			IList<IList<Object>> getValues = getResponse.Values;
 
-			if (getValues == null) return _logBookRange;
+			if (getValues == null) return range;
 
 			// Get new range
 			int currentCount = getValues.Count() + 1;
-			String newRange = "'Logbook'!A" + currentCount + ":I";
-
+			//String newRange = "'Logbook'!A" + currentCount + ":K";
+			string pattern = @"^('\w*'!\w)([1-9]+)(:\w*$)";
+			String newRange = Regex.Replace(range, pattern, m => m.Groups[1].Value + currentCount + m.Groups[3].Value);
 			return newRange;
 		}
 
-		public string GetNewRange()
-		{
-			// Define request parameters.
-			SpreadsheetsResource.ValuesResource.GetRequest getRequest =
-				_sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _logBookRange);
 
-			ValueRange getResponse = getRequest.Execute();
-			IList<IList<Object>> getValues = getResponse.Values;
-
-			if (getValues == null) return _logBookRange;
-
-			// Get new range
-			int currentCount = getValues.Count() + 1;
-			String newRange = "'Logbook'!A" + currentCount + ":I";
-
-			return newRange;
-		}
-
-		public void updateSheet(IList<IList<Object>> newRecords)
+		public void updateSheet(IList<IList<Object>> newRecords, string range = _logBookRange)
 		{
 			SpreadsheetsResource.ValuesResource.AppendRequest request =
-				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange());
+				_sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange(range));
 			request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.OVERWRITE;
 			request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
 			var response = request.ExecuteAsync();
 		}
 
-		protected void DMOnly(IGuildUser user)
-		{			
+		protected void DMOnly()
+		{
+			var user = (IGuildUser)Context.Message.Author;
 			var dmRole = Context.Guild.Roles.FirstOrDefault(x => x.Name == "DM");
 			if (!user.RoleIds.Contains(dmRole.Id))
 			{

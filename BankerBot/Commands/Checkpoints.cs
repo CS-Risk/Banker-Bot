@@ -28,7 +28,7 @@ namespace BankerBot.Commands
 		public async Task UpdateCheckpoints(string character, int checkpoints, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
-			DMOnly(user);
+			DMOnly();
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
