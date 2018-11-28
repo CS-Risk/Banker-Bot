@@ -13,12 +13,70 @@ namespace BankerBot.Commands
 {
 	public class Checkpoints : BankerModuleBase
 	{
-		public Checkpoints(SheetsService sheets)
+        //Column Index on the Character Record tab
+        private readonly int columnIndex = 1;
+
+        public Checkpoints(SheetsService sheets)
 		{
 			_sheetsService = sheets;
 		}
 
-		[Command("UpdateCheckpoints")]
+        [Command("ECP")]
+        public async Task CurrentECP()
+        {
+            // Get User
+            var user = (IGuildUser)Context.Message.Author;
+            await CurrentCheckpoints(GetCharacterName(user));
+        }
+
+        [Command("ECP")]
+        public async Task CurrentECP(SocketGuildUser user)
+        {
+            await CurrentCheckpoints(GetCharacterName(user));
+        }
+
+        [Command("ECP")]
+        public async Task CurrentECP(string characterName)
+        {
+            await CurrentCheckpoints(characterName);
+        }
+
+        [Command("Checkpoints")]
+        public async Task CurrentCheckpoints(string characterName)
+        {
+            // Read from Sheet
+            SpreadsheetsResource.ValuesResource.GetRequest request =
+                   _sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _characterRecordRange);
+
+            ValueRange response = request.Execute();
+            IList<IList<Object>> values = response.Values;
+
+            //Find the first row
+            var row = values.FirstOrDefault(x => (string)x[0] == characterName);
+            if (row == null)
+            {
+                throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
+            }
+            await ReplyAsync(String.Format("{0} has {1} ECP.", characterName, (string)row[columnIndex]));
+        }
+
+        [Command("Checkpoints")]
+        public async Task CurrentCheckpoints()
+        {
+            // Get User
+            var user = (IGuildUser)Context.Message.Author;
+            await CurrentCheckpoints(GetCharacterName(user));
+        }
+
+        [Command("Checkpoints")]
+        public async Task CurrentCheckpoints(SocketGuildUser user)
+        {
+            await CurrentCheckpoints(GetCharacterName(user));
+        }
+
+
+
+        [Command("UpdateCheckpoints")]
 		public async Task UpdateCheckpoints(SocketGuildUser user, int checkpoints, [Remainder]string note = "")
 		{
 			await UpdateCheckpoints(GetCharacterName(user.Nickname), checkpoints, note);
