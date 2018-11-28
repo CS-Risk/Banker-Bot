@@ -53,20 +53,21 @@ namespace BankerBot.Commands
 		}
 
 		[Command("SpendGold")]
-		public async Task SpendGold(decimal gold, [Remainder]string note = "")
+		public async Task SpendGold(decimal amount, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
+            var negativeAmount = -Math.Abs(amount);
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, gold: gold.ToString()));
+			newRecords.Add(CreateRow(user, gold: negativeAmount.ToString()));
 
 			// Update Sheet
 			updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0} spent {1} gp. {2}", GetCharacterName(user), gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0} spent {1} gp. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
 		[Command("GiveGold")]
@@ -76,25 +77,26 @@ namespace BankerBot.Commands
 		}
 
 		[Command("GiveGold")]
-		public async Task GiveGold(string recipient, decimal gold, [Remainder]string note = "")
+		public async Task GiveGold(string recipient, decimal amount, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
+            var negativeAmount = -Math.Abs(amount);
 
-			// Create record
-			List<IList<Object>> newRecords = new List<IList<Object>>();
+            // Create record
+            List<IList<Object>> newRecords = new List<IList<Object>>();
 
 			// Create disbursing record
-			newRecords.Add(CreateRow(user, gold: (gold * -1).ToString(), note: note));
+			newRecords.Add(CreateRow(user, gold: negativeAmount.ToString(), note: note));
 
 			// Create receiving record
-			newRecords.Add(CreateRow(user, charcterName: recipient, gold: gold.ToString(), note: note));
+			newRecords.Add(CreateRow(user, charcterName: recipient, gold: Math.Abs(amount).ToString(), note: note));
 
 			// Update Sheet
 			updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0} gave {1} {2} gp. {3}", GetCharacterName(user), recipient, gold.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0} gave {1} {2} gp. {3}", GetCharacterName(user), recipient, Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
 		[Command("UpdateGold")]
