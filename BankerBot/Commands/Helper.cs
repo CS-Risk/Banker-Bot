@@ -5,6 +5,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace BankerBot.Commands
 		[Command("Logbook")]
 		public async Task Logbook()
 		{			
-			await ReplyAsync("<https://docs.google.com/spreadsheets/d/17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs/edit?usp=sharing>");
+			await ReplyAsync("Godfall Logbook: <" + ConfigurationManager.AppSettings["logbookUrl"] +">");
 		}
 
 		[Command("Character")]

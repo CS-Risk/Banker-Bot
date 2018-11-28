@@ -38,7 +38,7 @@ namespace BankerBot.Commands
 			updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("Awarded {0} {1} checkpoint(s). {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("Awarded {0} {1} ECP. {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
 		[Command("BeBetter")]
@@ -69,7 +69,7 @@ namespace BankerBot.Commands
 			updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("Awarded {0} {1} checkpoint(s). {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("Awarded {0} {1} ECP. {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
 

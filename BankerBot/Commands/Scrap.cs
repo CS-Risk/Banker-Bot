@@ -54,20 +54,21 @@ namespace BankerBot.Commands
 		}
 
 		[Command("SpendScrap")]
-		public async Task SpendScrap(decimal Scrap, [Remainder]string note = "")
+		public async Task SpendScrap(decimal amount, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
+            var negativeAmount = -Math.Abs(amount);
 
-			// Create record
-			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, scrap: Scrap.ToString()));
+            // Create record
+            List<IList<Object>> newRecords = new List<IList<Object>>();
+			newRecords.Add(CreateRow(user, scrap: negativeAmount.ToString()));
 
 			// Update Sheet
 			updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0} spent {1} Scrap. {2}", GetCharacterName(user), Scrap.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0} spent {1} Scrap. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
 		[Command("GiveScrap")]
@@ -77,25 +78,26 @@ namespace BankerBot.Commands
 		}
 
 		[Command("GiveScrap")]
-		public async Task GiveScrap(string recipient, decimal Scrap, [Remainder]string note = "")
+		public async Task GiveScrap(string recipient, decimal amount, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
+            var negativeAmount = -Math.Abs(amount);
 
-			// Create record
-			List<IList<Object>> newRecords = new List<IList<Object>>();
+            // Create record
+            List<IList<Object>> newRecords = new List<IList<Object>>();
 
 			// Create disbursing record
-			newRecords.Add(CreateRow(user, scrap: (Scrap * -1).ToString(), note: note));
+			newRecords.Add(CreateRow(user, scrap: negativeAmount.ToString(), note: note));
 
 			// Create receiving record
-			newRecords.Add(CreateRow(user, charcterName: recipient, scrap: Scrap.ToString(), note: note));
+			newRecords.Add(CreateRow(user, charcterName: recipient, scrap: Math.Abs(amount).ToString(), note: note));
 
 			// Update Sheet
 			updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0} gave {1} {2} Scrap. {3}", GetCharacterName(user), recipient, Scrap.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0} gave {1} {2} Scrap. {3}", GetCharacterName(user), recipient, Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
 		[Command("UpdateScrap")]
