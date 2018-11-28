@@ -68,7 +68,8 @@ namespace BankerBot.Commands
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} spent {1} gp. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
-		}
+            await Gold();
+        }
 
 		[Command("GiveGold")]
 		public async Task GiveGold(SocketGuildUser recipient, decimal gold, [Remainder]string note = "")
