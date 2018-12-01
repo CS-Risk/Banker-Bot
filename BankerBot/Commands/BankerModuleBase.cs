@@ -104,8 +104,9 @@ namespace BankerBot.Commands
 		protected void DMOnly()
 		{
 			var user = (IGuildUser)Context.Message.Author;
-			var dmRole = Context.Guild.Roles.FirstOrDefault(x => x.Name == "DM");
-			if (!user.RoleIds.Contains(dmRole.Id))
+            var roles = Context.Guild.Roles.Where(x => x.Name == "DM" || x.Name == "Moderator").Select(x => x.Id);
+            //if (!user.RoleIds.Contains(dmRole.Id))
+            if (!user.RoleIds.Any(r => roles.Contains(r)))
 			{
 				throw new Exception("You do not have permission to do this.");
 			}

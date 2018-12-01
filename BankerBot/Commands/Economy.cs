@@ -20,7 +20,7 @@ namespace BankerBot.Commands
 		}
 
 		[Command("Gold")]
-		public async Task Gold(string characterName)
+		public async Task CurrentGold(string characterName)
 		{
 			// Read from Sheet
 			SpreadsheetsResource.ValuesResource.GetRequest request =
@@ -39,17 +39,17 @@ namespace BankerBot.Commands
 		}
 
 		[Command("Gold")]
-		public async Task Gold()
+		public async Task CurrentGold()
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
-			await Gold(GetCharacterName(user));
+			await CurrentGold(GetCharacterName(user));
 		}
 
 		[Command("Gold")]
-		public async Task Gold(SocketGuildUser user)
+		public async Task CurrentGold(SocketGuildUser user)
 		{
-			await Gold(GetCharacterName(user));
+			await CurrentGold(GetCharacterName(user));
 		}
 
 		[Command("SpendGold")]
@@ -68,7 +68,7 @@ namespace BankerBot.Commands
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} spent {1} gp. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
-            await Gold();
+            await CurrentGold();
         }
 
 		[Command("GiveGold")]
