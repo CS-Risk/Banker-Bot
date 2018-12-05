@@ -69,6 +69,7 @@ namespace BankerBot.Commands
 
             // Reply in Discord
             await ReplyAsync(string.Format("{0} spent {1} Scrap. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+            await CurrentScrap();
         }
 
 

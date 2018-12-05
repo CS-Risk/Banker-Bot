@@ -69,7 +69,8 @@ namespace BankerBot.Commands
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} spent {1} Essence. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
-		}
+            await CurrentEssence();
+        }
 
 		[Command("GiveEssence")]
 		public async Task GiveEssence(SocketGuildUser recipient, decimal Essence, [Remainder]string note = "")
