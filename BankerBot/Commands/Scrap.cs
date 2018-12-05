@@ -62,7 +62,7 @@ namespace BankerBot.Commands
 
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>();
-            newRecords.Add(CreateRow(user, scrap: negativeAmount.ToString()));
+            newRecords.Add(CreateRow(user, scrap: negativeAmount.ToString(), note: note));
 
             // Update Sheet
             updateSheet(newRecords);

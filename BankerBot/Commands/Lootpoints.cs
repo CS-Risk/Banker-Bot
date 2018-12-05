@@ -54,20 +54,23 @@ namespace BankerBot.Commands
 		}
 
 		[Command("SpendLootpoints")]
-		public async Task SpendLootpoints(decimal lootpoints, [Remainder]string note = "")
+		public async Task SpendLootpoints(decimal amount, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
+            var negativeAmount = -Math.Abs(amount);
 
-			// Create record
-			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, lootpoints: lootpoints.ToString()));
+            // Create record
+            List<IList<Object>> newRecords = new List<IList<Object>>
+            {
+                CreateRow(user, lootpoints: negativeAmount.ToString(), note: note)
+            };
 
-			// Update Sheet
-			updateSheet(newRecords);
+            // Update Sheet
+            updateSheet(newRecords);
 
 			// Reply in Discord
-			await ReplyAsync(string.Format("{0} spent {1} Lootpoints. {2}", GetCharacterName(user), lootpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
+			await ReplyAsync(string.Format("{0} spent {1} Lootpoints. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
 		}
 
 		[Command("UpdateLootpoints")]
