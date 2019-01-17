@@ -38,5 +38,11 @@ namespace BankerBot.Commands
 			await ReplyAsync(GetCharacterName(user));
 		}	
 
+        [Command("ServerTime")]
+        public async Task CurrentTime()
+        {
+            DateTime eastern = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Eastern Standard Time");
+            await ReplyAsync("The current server time is: " + eastern.ToString("t"));
+        }
 	}
 }

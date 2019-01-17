@@ -5,6 +5,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,7 +14,8 @@ namespace BankerBot.Commands
 {
     public class Scrap : BankerModuleBase
     {
-        private readonly int columnIndex = 5;
+        //Column Index on the Character Record tab
+        private readonly int columnIndex = Convert.ToInt32(ConfigurationManager.AppSettings["ScrapColumn"]);
 
         public Scrap(SheetsService sheets)
         {

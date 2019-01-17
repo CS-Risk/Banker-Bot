@@ -5,6 +5,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,7 +15,10 @@ namespace BankerBot.Commands
 	public class Economy : BankerModuleBase
 	{
 
-		public Economy(SheetsService sheets)
+        //Column Index on the Character Record tab
+        private readonly int columnIndex = Convert.ToInt32(ConfigurationManager.AppSettings["GoldColumn"]);
+
+        public Economy(SheetsService sheets)
 		{
 			_sheetsService = sheets;
 		}
@@ -35,7 +39,7 @@ namespace BankerBot.Commands
 			{
 				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
 			}
-			await ReplyAsync(String.Format("{0} has {1} gp.", characterName, (string)row[3]));
+			await ReplyAsync(String.Format("{0} has {1} gp.", characterName, (string)row[columnIndex]));
 		}
 
 		[Command("Gold")]

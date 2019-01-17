@@ -5,6 +5,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace BankerBot.Commands
 	public class Checkpoints : BankerModuleBase
 	{
         //Column Index on the Character Record tab
-        private readonly int columnIndex = 1;
+        private readonly int columnIndex = Convert.ToInt32(ConfigurationManager.AppSettings["CheckpointColumn"]);
 
         public Checkpoints(SheetsService sheets)
 		{
@@ -73,8 +74,6 @@ namespace BankerBot.Commands
         {
             await CurrentCheckpoints(GetCharacterName(user));
         }
-
-
 
         [Command("UpdateCheckpoints")]
 		public async Task UpdateCheckpoints(SocketGuildUser user, int checkpoints, [Remainder]string note = "")

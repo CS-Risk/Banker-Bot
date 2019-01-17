@@ -5,6 +5,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,9 +14,10 @@ namespace BankerBot.Commands
 {
 	public class Lootpoints : BankerModuleBase
 	{
-		private readonly int columnIndex = 2;
+        //Column Index on the Character Record tab
+        private readonly int columnIndex = Convert.ToInt32(ConfigurationManager.AppSettings["LootpointColumn"]);
 
-		public Lootpoints(SheetsService sheets)
+        public Lootpoints(SheetsService sheets)
 		{
 			_sheetsService = sheets;
 		}
