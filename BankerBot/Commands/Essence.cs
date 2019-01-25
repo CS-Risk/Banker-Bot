@@ -56,7 +56,7 @@ namespace BankerBot.Commands
 		}
 
 		[Command("SpendEssence")]
-		public async Task SpendEssence(decimal amount, [Remainder]string note = "")
+		public async Task SpendEssence(int amount, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
@@ -75,19 +75,21 @@ namespace BankerBot.Commands
         }
 
 		[Command("GiveEssence")]
-		public async Task GiveEssence(SocketGuildUser recipient, decimal Essence, [Remainder]string note = "")
+		public async Task GiveEssence(SocketGuildUser recipient, int Essence, [Remainder]string note = "")
 		{
 			await GiveEssence(GetCharacterName(recipient.Nickname), Essence, note);
 		}
 
 		[Command("GiveEssence")]
-		public async Task GiveEssence(string recipient, decimal Essence, [Remainder]string note = "")
+		public async Task GiveEssence(string recipient, int Essence, [Remainder]string note = "")
 		{
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
 
-			// Create record
-			List<IList<Object>> newRecords = new List<IList<Object>>();
+            CheckCharacterName(recipient); //Check that the Recipient exists before doing anything else.
+
+            // Create record
+            List<IList<Object>> newRecords = new List<IList<Object>>();
 
 			// Create disbursing record
 			newRecords.Add(CreateRow(user, essence: (Essence * -1).ToString(), note: note));
@@ -103,13 +105,13 @@ namespace BankerBot.Commands
 		}
 
 		[Command("UpdateEssence")]
-		public async Task UpdateEssence(SocketGuildUser user, decimal Essence, [Remainder]string note = "")
+		public async Task UpdateEssence(SocketGuildUser user, int Essence, [Remainder]string note = "")
 		{
 			await UpdateEssence(GetCharacterName(user.Nickname), Essence, note);
 		}
 
 		[Command("UpdateEssence")]
-		public async Task UpdateEssence(string character, decimal Essence, [Remainder]string note = "")
+		public async Task UpdateEssence(string character, int Essence, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
 			DMOnly();

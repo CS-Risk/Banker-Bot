@@ -31,7 +31,9 @@ namespace BankerBot.Commands
 			else
 				obj.Add(GetCharacterName(user));
 
-			obj.Add("BankerBot (" + user.Username + ")"); // DM
+            CheckCharacterName(charcterName); // Check that the character exists.
+
+            obj.Add("BankerBot (" + user.Username + ")"); // DM
 			obj.Add(DateTime.Today.ToShortDateString()); // Date
 			obj.Add(tier); // Tier
 			obj.Add(checkpoints); // Checkpoints
@@ -71,6 +73,25 @@ namespace BankerBot.Commands
 		{
 			return Regex.Match(nickname, @"\(([^)]*)\)").Groups[1].Value;
 		}
+
+        protected void CheckCharacterName(string characterName)
+        {
+            // Read from Sheet
+            SpreadsheetsResource.ValuesResource.GetRequest request =
+                   _sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _characterRecordRange);
+
+            ValueRange response = request.Execute();
+            IList<IList<Object>> values = response.Values;
+
+            var row = values.FirstOrDefault(x => (string)x[0] == characterName);
+
+            if (row == null)
+            {
+                throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
+            }
+
+            return;
+        }
 
 		public string GetNewRange(string range)
 		{

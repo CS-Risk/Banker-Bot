@@ -88,6 +88,8 @@ namespace BankerBot.Commands
 			var user = (IGuildUser)Context.Message.Author;
             var negativeAmount = -Math.Abs(amount);
 
+            CheckCharacterName(recipient); //Check that the Recipient exists before doing anything else.
+
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>();
 
