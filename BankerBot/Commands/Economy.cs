@@ -153,7 +153,7 @@ namespace BankerBot.Commands
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, charcterName: character, gold: gold.ToString(), note: "Starting Gold"));
+			newRecords.Add(CreateRow(user, charcterName: character, gold: gold.ToString(), note: "Starting Gold", validateName: false));
 
 			// Update Sheet
 			updateSheet(newRecords);

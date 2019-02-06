@@ -21,25 +21,26 @@ namespace BankerBot.Commands
 
         protected SheetsService _sheetsService;
 
-        protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string scrap = "", string note = "", string resurected = "")
+        protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string scrap = "", string note = "", string resurected = "", bool validateName = true)
         {
 
             IList<Object> obj = new List<Object>();
 
-            if (!string.IsNullOrWhiteSpace(charcterName))
+            // Check that the character exists if validateName = true (default).
+            if (validateName)
             {
-                // Character
-                CheckCharacterName(charcterName);
-                obj.Add(charcterName);
+                if (!string.IsNullOrWhiteSpace(charcterName))
+                {                  
+                    CheckCharacterName(charcterName);              
+                }
+                else
+                {
+                    charcterName = GetCharacterName(user);
+                    CheckCharacterName(charcterName);                 
+                }
             }
-            else
-            {
-                charcterName = GetCharacterName(user);
-                CheckCharacterName(charcterName);
-                obj.Add(charcterName);
-            }
-            // Check that the character exists.
 
+            obj.Add(charcterName);
             obj.Add("BankerBot (" + user.Username + ")"); // DM
             obj.Add(DateTime.Today.ToShortDateString()); // Date
             obj.Add(tier); // Tier
