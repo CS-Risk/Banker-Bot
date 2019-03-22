@@ -12,31 +12,31 @@ using System.Threading.Tasks;
 
 namespace BankerBot.Commands
 {
-	public class Helper : BankerModuleBase
-	{
-		public Helper(SheetsService sheets)
-		{
-			_sheetsService = sheets;
-		}
+    public class Helper : BankerModuleBase
+    {
+        public Helper(SheetsService sheets)
+        {
+            _sheetsService = sheets;
+        }
 
-		[Command("Logbook")]
-		public async Task Logbook()
-		{			
-			await ReplyAsync("Godfall Logbook: <" + ConfigurationManager.AppSettings["logbookUrl"] +">");
-		}
+        [Command("Logbook")]
+        public async Task Logbook()
+        {
+            await ReplyAsync("Godfall Logbook: <" + ConfigurationManager.AppSettings["logbookUrl"] + ">");
+        }
 
-		[Command("Character")]
-		public async Task Character()
-		{
-			var user = (IGuildUser)Context.Message.Author;
-			await ReplyAsync(GetCharacterName(user));
-		}
+        [Command("Character")]
+        public async Task Character()
+        {
+            var user = (IGuildUser)Context.Message.Author;
+            await ReplyAsync(GetCharacterName(user));
+        }
 
-		[Command("Character")]
-		public async Task Character(SocketGuildUser user)
-		{
-			await ReplyAsync(GetCharacterName(user));
-		}	
+        [Command("Character")]
+        public async Task Character(SocketGuildUser user)
+        {
+            await ReplyAsync(GetCharacterName(user));
+        }
 
         [Command("ServerTime")]
         public async Task CurrentTime()
@@ -71,7 +71,7 @@ namespace BankerBot.Commands
             DateString = DateString.Replace("Friday, ", "");
             DateString = DateString.Replace("Saturday, ", "");
             DateString = DateString.Replace("Sunday, ", "");
-            
+
             DateString = DateString.Insert(DateString.IndexOf(',') + 1, " Swell - Ebb,");
             DateString = DateString.Insert(DateString.Length, " A.G.");
 
@@ -81,11 +81,24 @@ namespace BankerBot.Commands
         [Command("MoonCycle")]
         public async Task MoonCycle()
         {
-            await ReplyAsync(@"Swell - 0:00: :new_moon: 
-Swell - 18:00: :first_quarter_moon: 
-Crown - 12:00: :full_moon: 
-Ebb - 6:00: :last_quarter_moon: 
-Ebb - 24:00 :new_moon:");
+
+            await ReplyAsync(@"**Caliban's Cycle**
+Swell - 0:00:    <:new_caliban_moon:558773491738869770>
+Swell - 18:00:   <:first_quarter_caliban_moon:558773491802046464>
+Crown - 12:00: <:full_caliban_moon:558773492296974346>
+Ebb - 6:00:        <:last_quarter_caliban_moon:558773491302924309>
+Ebb - 24:00:     <:new_caliban_moon:558773491738869770>
+<:praise:558779115965120512>");
+
         }
-	}
+
+        [Command("ImageTest")]
+        public async Task Embed()
+        {
+            var FullMoon = new EmbedBuilder();
+            FullMoon.WithImageUrl("https://i.imgur.com/nuHZTME.jpg");
+
+            await ReplyAsync("", false, FullMoon.Build());
+        }
+    }
 }
