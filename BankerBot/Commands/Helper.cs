@@ -85,7 +85,7 @@ namespace BankerBot.Commands
 Swell - 18:00: :first_quarter_moon: 
 Crown - 12:00: :full_moon: 
 Ebb - 6:00: :last_quarter_moon: 
-Ebb - 12:00 :new_moon:");
+Ebb - 24:00 :new_moon:");
         }
 	}
 }
