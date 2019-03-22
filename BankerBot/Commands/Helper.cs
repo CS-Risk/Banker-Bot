@@ -77,5 +77,15 @@ namespace BankerBot.Commands
 
             await ReplyAsync("It is currently " + DateString);
         }
+
+        [Command("MoonCycle")]
+        public async Task MoonCycle()
+        {
+            await ReplyAsync(@"Swell - 0:00: :new_moon: 
+Swell - 18:00: :first_quarter_moon: 
+Crown - 12:00: :full_moon: 
+Ebb - 6:00: :last_quarter_moon: 
+Ebb - 12:00 :new_moon:");
+        }
 	}
 }
