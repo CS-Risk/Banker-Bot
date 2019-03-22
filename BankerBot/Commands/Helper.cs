@@ -78,17 +78,23 @@ namespace BankerBot.Commands
             await ReplyAsync("It is currently " + DateString);
         }
 
+        [Command("MoonPhase")]
+        public async Task MoonPhase()
+        {
+            await MoonCycle();
+        }
+
         [Command("MoonCycle")]
         public async Task MoonCycle()
         {
 
-            await ReplyAsync(@"**Caliban's Cycle**
+            await ReplyAsync(@"__**Caliban's Cycle**__
 Swell - 0:00:    <:new_caliban_moon:558773491738869770>
 Swell - 18:00:   <:first_quarter_caliban_moon:558773491802046464>
 Crown - 12:00: <:full_caliban_moon:558773492296974346>
 Ebb - 6:00:        <:last_quarter_caliban_moon:558773491302924309>
 Ebb - 24:00:     <:new_caliban_moon:558773491738869770>
-<:praise:558779115965120512>");
+<:praise:558779115965120512> <http://godfall.azurewebsites.net/world/solace/calendar/>");
 
         }
 
