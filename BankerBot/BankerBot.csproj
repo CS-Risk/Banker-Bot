@@ -176,6 +176,7 @@
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
     <Compile Include="Commands\Checkpoints.cs" />
+    <Compile Include="Errors.cs" />
     <Compile Include="Commands\Factions.cs" />
     <Compile Include="Commands\Helper.cs" />
     <Compile Include="Commands\Lootpoints.cs" />

@@ -22,61 +22,28 @@ namespace BankerBot.Commands
 			_sheetsService = sheets;
 		}
 
-        //[Command("ECP")]
-        //public async Task CurrentECP()
-        //{
-        //    // Get User
-        //    var user = (IGuildUser)Context.Message.Author;
-        //    await CurrentCheckpoints(GetCharacterName(user));
-        //}
+		[Command("Checkpoints")]
+		[Alias("ECP")]
+		public async Task CurrentCheckpoints()
+		{
+			// Get User
+			var user = (IGuildUser)Context.Message.Author;
+			await CurrentCheckpoints(GetCharacterName(user));
+		}
 
-        //[Command("ECP")]
-        //public async Task CurrentECP(SocketGuildUser user)
-        //{
-        //    await CurrentCheckpoints(GetCharacterName(user));
-        //}
+		[Command("Checkpoints")]
+		[Alias("ECP")]
+		public async Task CurrentCheckpoints(SocketGuildUser user)
+		{
+			await CurrentCheckpoints(GetCharacterName(user));
+		}
 
-        //[Command("ECP")]
-        //public async Task CurrentECP(string characterName)
-        //{
-        //    await CurrentCheckpoints(characterName);
-        //}
-
-        [Command("Checkpoints")]
+		[Command("Checkpoints")]
 		[Alias("ECP")]
 		public async Task CurrentCheckpoints(string characterName)
         {
-            // Read from Sheet
-            SpreadsheetsResource.ValuesResource.GetRequest request =
-                   _sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _characterRecordRange);
-
-            ValueRange response = request.Execute();
-            IList<IList<Object>> values = response.Values;
-
-            //Find the first row
-            var row = values.FirstOrDefault(x => (string)x[0] == characterName);
-            if (row == null)
-            {
-                throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
-            }
-            await ReplyAsync(String.Format("{0} has {1} ECP.", characterName, (string)row[columnIndex]));
-        }
-
-        [Command("Checkpoints")]
-		[Alias("ECP")]
-		public async Task CurrentCheckpoints()
-        {
-            // Get User
-            var user = (IGuildUser)Context.Message.Author;
-            await CurrentCheckpoints(GetCharacterName(user));
-        }
-
-        [Command("Checkpoints")]
-		[Alias("ECP")]
-		public async Task CurrentCheckpoints(SocketGuildUser user)
-        {
-            await CurrentCheckpoints(GetCharacterName(user));
-        }
+			await ReplyWithCharacterRecordField(characterName, columnIndex);
+		}       
 
         [Command("UpdateCheckpoints")]
 		[Alias("UpdateECP")]
@@ -94,10 +61,10 @@ namespace BankerBot.Commands
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, charcterName: character, checkpoints: checkpoints.ToString(), note: note));
+			newRecords.Add(await CreateRow(user, charcterName: character, checkpoints: checkpoints.ToString(), note: note));
 
 			// Update Sheet
-			updateSheet(newRecords);
+			await UpdateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("Awarded {0} {1} ECP. {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -125,10 +92,10 @@ namespace BankerBot.Commands
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, charcterName: character, checkpoints: checkpoints.ToString(), note: note));
+			newRecords.Add(await CreateRow(user, charcterName: character, checkpoints: checkpoints.ToString(), note: note));
 
 			// Update Sheet
-			updateSheet(newRecords);
+			await UpdateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("Awarded {0} {1} ECP. {2}", character, checkpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));

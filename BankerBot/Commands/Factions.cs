@@ -76,7 +76,7 @@ namespace BankerBot.Commands
 			newRecords.Add(CreateFactionRow(user, charcterName: GetCharacterName(user.Nickname), faction: faction, points: points.ToString(), note: note));
 
 			// Update Sheet
-			updateSheet(newRecords, _factionRange);
+			await UpdateSheet(newRecords, _factionRange);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} point(s) to the {1}! {2}", points.ToString(), faction, (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));

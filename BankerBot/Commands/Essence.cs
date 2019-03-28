@@ -2,7 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Google.Apis.Sheets.v4;
-using Google.Apis.Sheets.v4.Data;
+using Data = Google.Apis.Sheets.v4.Data;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -23,25 +23,6 @@ namespace BankerBot.Commands
 		}
 
 		[Command("Essence")]
-		public async Task CurrentEssence(string characterName)
-		{
-			// Read from Sheet
-			SpreadsheetsResource.ValuesResource.GetRequest request =
-				   _sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _characterRecordRange);
-
-			ValueRange response = request.Execute();
-			IList<IList<Object>> values = response.Values;
-
-			//Find the first row
-			var row = values.FirstOrDefault(x => (string)x[0] == characterName);
-			if (row == null)
-			{
-				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
-			}
-			await ReplyAsync(String.Format("{0} has {1} Essence.", characterName, (string)row[columnIndex]));
-		}
-
-		[Command("Essence")]
 		public async Task CurrentEssence()
 		{
 			// Get User
@@ -51,9 +32,15 @@ namespace BankerBot.Commands
 
 		[Command("Essence")]
 		public async Task CurrentEssence(SocketGuildUser user)
-		{			
+		{
 			await CurrentEssence(GetCharacterName(user));
 		}
+
+		[Command("Essence")]
+		public async Task CurrentEssence(string characterName)
+		{
+			await ReplyWithCharacterRecordField(characterName, columnIndex);
+		}		
 
 		[Command("SpendEssence")]
 		public async Task SpendEssence(int amount, [Remainder]string note = "")
@@ -64,14 +51,13 @@ namespace BankerBot.Commands
 
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, essence: negativeAmount.ToString(), note: note));
+			newRecords.Add(await CreateRow(user, essence: negativeAmount.ToString(), note: note));
 
 			// Update Sheet
-			updateSheet(newRecords);
+			await UpdateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} spent {1} Essence. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
-            await CurrentEssence();
         }
 
 		[Command("GiveEssence")]
@@ -86,19 +72,19 @@ namespace BankerBot.Commands
 			// Get User
 			var user = (IGuildUser)Context.Message.Author;
 
-            CheckCharacterName(recipient); //Check that the Recipient exists before doing anything else.
+            await CheckCharacterName(recipient); //Check that the Recipient exists before doing anything else.
 
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>();
 
 			// Create disbursing record
-			newRecords.Add(CreateRow(user, essence: (Essence * -1).ToString(), note: note));
+			newRecords.Add(await CreateRow(user, essence: (Essence * -1).ToString(), note: note));
 
 			// Create receiving record
-			newRecords.Add(CreateRow(user, charcterName: recipient, essence: Essence.ToString(), note: note));
+			newRecords.Add(await CreateRow(user, charcterName: recipient, essence: Essence.ToString(), note: note));
 
 			// Update Sheet
-			updateSheet(newRecords);
+			await UpdateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} gave {1} {2} Essence. {3}", GetCharacterName(user), recipient, Essence.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -118,10 +104,10 @@ namespace BankerBot.Commands
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, charcterName: character, essence: Essence.ToString(), note: note));
+			newRecords.Add(await CreateRow(user, charcterName: character, essence: Essence.ToString(), note: note));
 
 			// Update Sheet
-			updateSheet(newRecords);
+			await UpdateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0}'s Essence value changed by {1}. {2}", character, Essence.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));

@@ -84,24 +84,24 @@ namespace BankerBot
             // When all your required services are in the collection, build the container.
             // Tip: There's an overload taking in a 'validateScopes' bool to make sure
             // you haven't made any mistakes in your dependency graph.
-            _services = _map.BuildServiceProvider();
+            _services = _map.BuildServiceProvider();			
 
-            // Either search the program and add all Module classes that can be found.
-            // Module classes *must* be marked 'public' or they will be ignored.
+			// Either search the program and add all Module classes that can be found.
+			// Module classes *must* be marked 'public' or they will be ignored.
 			await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
 			// Subscribe a handler to see if a message invokes a command.
 			_client.MessageReceived += HandleCommandAsync;
-        }
+		}
 
         private async Task HandleCommandAsync(SocketMessage arg)
         {
-            // Bail out if it's a System Message.
-            var msg = arg as SocketUserMessage;
-            if (msg == null) return;
+			// Bail out if it's a System Message.
+			if (!(arg is SocketUserMessage msg)) return;
 
-            // Create a number to track where the prefix ends and the command begins
-            int pos = 0;
+			// Create a number to track where the prefix ends and the command begins
+			int pos = 0;
+
             // Replace the '!' with whatever character
             // you want to prefix your commands with.
             if (msg.HasCharPrefix(prefix, ref pos))

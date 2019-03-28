@@ -23,25 +23,6 @@ namespace BankerBot.Commands
 		}
 
 		[Command("Lootpoints")]
-		public async Task CurrentLootpoints(string characterName)
-		{
-			// Read from Sheet
-			SpreadsheetsResource.ValuesResource.GetRequest request =
-				   _sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _characterRecordRange);
-
-			ValueRange response = request.Execute();
-			IList<IList<Object>> values = response.Values;
-
-			//Find the first row
-			var row = values.FirstOrDefault(x => (string)x[0] == characterName);
-			if (row == null)
-			{
-				throw new Exception(string.Format("A character with the name of '{0}' could not be found in the logbook.", characterName));
-			}
-			await ReplyAsync(String.Format("{0} has {1} Lootpoints.", characterName, (string)row[columnIndex]));
-		}
-
-		[Command("Lootpoints")]
 		public async Task CurrentLootpoints()
 		{
 			// Get User
@@ -55,6 +36,12 @@ namespace BankerBot.Commands
 			await CurrentLootpoints(GetCharacterName(user));
 		}
 
+		[Command("Lootpoints")]
+		public async Task CurrentLootpoints(string characterName)
+		{
+			await ReplyWithCharacterRecordField(characterName, columnIndex);
+		}		
+
 		[Command("SpendLootpoints")]
 		public async Task SpendLootpoints(decimal amount, [Remainder]string note = "")
 		{
@@ -65,11 +52,11 @@ namespace BankerBot.Commands
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>
             {
-                CreateRow(user, lootpoints: negativeAmount.ToString(), note: note)
+                await CreateRow(user, lootpoints: negativeAmount.ToString(), note: note)
             };
 
             // Update Sheet
-            updateSheet(newRecords);
+            await UpdateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0} spent {1} Lootpoints. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -89,10 +76,10 @@ namespace BankerBot.Commands
 
 			// Create record
 			List<IList<Object>> newRecords = new List<IList<Object>>();
-			newRecords.Add(CreateRow(user, charcterName: character, lootpoints: lootpoints.ToString(), note: note));
+			newRecords.Add(await CreateRow(user, charcterName: character, lootpoints: lootpoints.ToString(), note: note));
 
 			// Update Sheet
-			updateSheet(newRecords);
+			await UpdateSheet(newRecords);
 
 			// Reply in Discord
 			await ReplyAsync(string.Format("{0}'s Lootpoints changed by {1}. {2}", character, lootpoints.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));

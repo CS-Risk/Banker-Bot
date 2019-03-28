@@ -64,10 +64,10 @@ namespace BankerBot.Commands
 
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>();
-            newRecords.Add(CreateRow(user, scrap: negativeAmount.ToString(), note: note));
+            newRecords.Add(await CreateRow(user, scrap: negativeAmount.ToString(), note: note));
 
-            // Update Sheet
-            updateSheet(newRecords);
+			// Update Sheet
+			await UpdateSheet(newRecords);
 
             // Reply in Discord
             await ReplyAsync(string.Format("{0} spent {1} Scrap. {2}", GetCharacterName(user), Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -85,10 +85,10 @@ namespace BankerBot.Commands
 
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>();
-            newRecords.Add(CreateRow(user, scrap: negativeAmount.ToString(), gold: goldAmount.ToString()));
+            newRecords.Add(await CreateRow(user, scrap: negativeAmount.ToString(), gold: goldAmount.ToString()));
 
             // Update Sheet
-            updateSheet(newRecords);
+            await UpdateSheet(newRecords);
 
             // Read from Sheet
             SpreadsheetsResource.ValuesResource.GetRequest request =
@@ -124,19 +124,19 @@ namespace BankerBot.Commands
             var user = (IGuildUser)Context.Message.Author;
             var negativeAmount = -Math.Abs(amount);
 
-            CheckCharacterName(recipient); //Check that the Recipient exists before doing anything else.
+            await CheckCharacterName(recipient); //Check that the Recipient exists before doing anything else.
 
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>();
 
             // Create disbursing record
-            newRecords.Add(CreateRow(user, scrap: negativeAmount.ToString(), note: note));
+            newRecords.Add(await CreateRow(user, scrap: negativeAmount.ToString(), note: note));
 
             // Create receiving record
-            newRecords.Add(CreateRow(user, charcterName: recipient, scrap: Math.Abs(amount).ToString(), note: note));
+            newRecords.Add(await CreateRow(user, charcterName: recipient, scrap: Math.Abs(amount).ToString(), note: note));
 
             // Update Sheet
-            updateSheet(newRecords);
+            await UpdateSheet(newRecords);
 
             // Reply in Discord
             await ReplyAsync(string.Format("{0} gave {1} {2} Scrap. {3}", GetCharacterName(user), recipient, Math.Abs(amount).ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));
@@ -163,10 +163,10 @@ namespace BankerBot.Commands
 
             // Create record
             List<IList<Object>> newRecords = new List<IList<Object>>();
-            newRecords.Add(CreateRow(user, charcterName: character, scrap: Scrap.ToString(), note: note));
+            newRecords.Add(await CreateRow(user, charcterName: character, scrap: Scrap.ToString(), note: note));
 
-            // Update Sheet
-            updateSheet(newRecords);
+			// Update Sheet
+			await UpdateSheet(newRecords);
 
             // Reply in Discord
             await ReplyAsync(string.Format("{0}'s Scrap value changed by {1}. {2}", character, Scrap.ToString(), (!string.IsNullOrEmpty(note) ? string.Format("({0})", note) : "")));

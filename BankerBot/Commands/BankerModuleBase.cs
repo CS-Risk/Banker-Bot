@@ -7,6 +7,8 @@ using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace BankerBot.Commands
 {
@@ -19,8 +21,8 @@ namespace BankerBot.Commands
         protected const string _characterListRange = "'Character List'!A2:O";
 
         protected SheetsService _sheetsService;
-
-        protected IList<Object> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string scrap = "", string note = "", string resurected = "", bool validateName = true)
+	
+        protected async Task<IList<Object>> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string scrap = "", string note = "", string resurected = "", bool validateName = true)
         {
 
             IList<Object> obj = new List<Object>();
@@ -30,12 +32,12 @@ namespace BankerBot.Commands
             {
                 if (!string.IsNullOrWhiteSpace(charcterName))
                 {                  
-                    CheckCharacterName(charcterName);              
+                    await CheckCharacterName(charcterName);              
                 }
                 else
                 {
                     charcterName = GetCharacterName(user);
-                    CheckCharacterName(charcterName);                 
+					await CheckCharacterName(charcterName);                 
                 }
             }
 
@@ -81,13 +83,13 @@ namespace BankerBot.Commands
             return Regex.Match(nickname, @"\(([^)]*)\)").Groups[1].Value;
         }
 
-        protected void CheckCharacterName(string characterName)
+        protected async Task CheckCharacterName(string characterName)
         {
             // Read from Sheet
             SpreadsheetsResource.ValuesResource.GetRequest request =
                    _sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _characterRecordRange);
 
-            ValueRange response = request.Execute();
+            ValueRange response = await request.ExecuteAsync();
             IList<IList<Object>> values = response.Values;
 
             var row = values.FirstOrDefault(x => (string)x[0] == characterName);
@@ -100,7 +102,31 @@ namespace BankerBot.Commands
             return;
         }
 
-        public string GetNewRange(string range)
+		protected async Task<ValueRange> GetCharacterRecordValueRange()
+		{
+			//Read from the Sheet
+			SpreadsheetsResource.ValuesResource.GetRequest request = _sheetsService.Spreadsheets.Values.Get(_spreadsheetId, _characterRecordRange);
+			request.ValueRenderOption = SpreadsheetsResource.ValuesResource.GetRequest.ValueRenderOptionEnum.FORMATTEDVALUE;
+			request.DateTimeRenderOption = SpreadsheetsResource.ValuesResource.GetRequest.DateTimeRenderOptionEnum.FORMATTEDSTRING;
+
+			return await request.ExecuteAsync();
+		}
+
+		protected async Task ReplyWithCharacterRecordField(string characterName, int columnIndex)
+		{
+			// Read from Sheet
+			ValueRange response = await GetCharacterRecordValueRange();
+
+			//Find the row where 1st column matches our characterName
+			var row = response.Values.FirstOrDefault(x => (string)x[0] == characterName);
+
+			if (row == null) throw new CharacterNotFoundException(characterName);
+
+			await ReplyAsync(String.Format("{0} has {1} gp.", characterName, row[columnIndex].ToString()));
+		}
+
+
+		public string GetNewRange(string range)
         {
             // Define request parameters.
             SpreadsheetsResource.ValuesResource.GetRequest getRequest =
@@ -118,16 +144,15 @@ namespace BankerBot.Commands
             String newRange = Regex.Replace(range, pattern, m => m.Groups[1].Value + currentCount + m.Groups[3].Value);
             return newRange;
         }
-
-
-        public void updateSheet(IList<IList<Object>> newRecords, string range = _logBookRange)
+		
+        public async Task UpdateSheet(IList<IList<Object>> newRecords, string range = _logBookRange)
         {
             SpreadsheetsResource.ValuesResource.AppendRequest request =
                 _sheetsService.Spreadsheets.Values.Append(new ValueRange() { Values = newRecords }, _spreadsheetId, GetNewRange(range));
             request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.OVERWRITE;
             request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-            var response = request.ExecuteAsync();
-        }
+			var response = await request.ExecuteAsync();
+		}
 
         protected void DMOnly()
         {
