@@ -12,7 +12,6 @@ namespace BankerBot.Commands
 {
     public class BankerModuleBase : ModuleBase
     {
-        //protected const string _spreadsheetId = "17cmOpZfy68x43jgGGHLah1_vhzAPUx1RdjixVXB8Pzs";
         protected readonly string _spreadsheetId = ConfigurationManager.AppSettings["spreadsheetId"];
         protected const string _logBookRange = "'Logbook'!A2:K";
         protected const string _factionRange = "'Faction Challenge'!A2:E";

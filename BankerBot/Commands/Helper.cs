@@ -46,7 +46,8 @@ namespace BankerBot.Commands
         }
 
         [Command("OteraDate")]
-        public async Task OteraDate()
+		[Alias("Date")]
+		public async Task OteraDate()
         {
             DateTime OteraDate = DateTime.Now.AddYears(-1019);
             string DateString = OteraDate.ToLongDateString();
@@ -78,14 +79,9 @@ namespace BankerBot.Commands
             await ReplyAsync("It is currently " + DateString);
         }
 
-        [Command("MoonPhase")]
-        public async Task MoonPhase()
-        {
-            await MoonCycle();
-        }
-
         [Command("MoonCycle")]
-        public async Task MoonCycle()
+		[Alias("MoonPhase")]
+		public async Task MoonCycle()
         {
 
             await ReplyAsync(@"__**Caliban's Cycle**__
@@ -102,8 +98,10 @@ Ebb - 24:00:     <:new_caliban_moon:558773491738869770>
         public async Task Embed()
         {
             var FullMoon = new EmbedBuilder();
-            FullMoon.WithImageUrl("https://i.imgur.com/nuHZTME.jpg");
-
+            var DiscordGray = new Discord.Color(0x36393F);
+            FullMoon.WithImageUrl("https://i.imgur.com/Tg3b9H3.png");
+            FullMoon.WithDescription("http://godfall.azurewebsites.net/world/solace/calendar/");
+            FullMoon.WithColor(DiscordGray);
             await ReplyAsync("", false, FullMoon.Build());
         }
     }

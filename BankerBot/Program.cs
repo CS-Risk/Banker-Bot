@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RPGBot
+namespace BankerBot
 {
     class Program
     {
@@ -86,13 +86,12 @@ namespace RPGBot
             // you haven't made any mistakes in your dependency graph.
             _services = _map.BuildServiceProvider();
 
-
             // Either search the program and add all Module classes that can be found.
             // Module classes *must* be marked 'public' or they will be ignored.
-            await _commands.AddModulesAsync(Assembly.GetEntryAssembly());
+			await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
-            // Subscribe a handler to see if a message invokes a command.
-            _client.MessageReceived += HandleCommandAsync;
+			// Subscribe a handler to see if a message invokes a command.
+			_client.MessageReceived += HandleCommandAsync;
         }
 
         private async Task HandleCommandAsync(SocketMessage arg)
@@ -113,12 +112,26 @@ namespace RPGBot
                 // Execute the command. (result does not indicate a return value, rather an object stating if the command executed succesfully).
                 var result = await _commands.ExecuteAsync(context, pos, _services);
 
-                // Uncomment the following lines if you want the bot
-                // to send a message if it failed (not advised for most situations).
-                if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
-                    await msg.Channel.SendMessageAsync(result.ErrorReason);
+				// Uncomment the following lines if you want the bot
+				// to send a message if it failed (not advised for most situations).	
+				if (result.Error != null)
+					switch (result.Error)
+					{
+						case CommandError.BadArgCount:
+							await context.Channel.SendMessageAsync(
+								"Parameter count does not match any command's.");
+							break;
+						case CommandError.UnknownCommand:
+							await context.Channel.SendMessageAsync(
+								"Command not recognized.");
+							break;
+						default:
+							await context.Channel.SendMessageAsync(
+								$"An error has occurred {result.ErrorReason}");
+							break;
+					}
 
-                if (result.IsSuccess)
+                if (result.IsSuccess && AppSettings.Get<bool>("DeleteCommand"))
                 {
                     await context.Message.DeleteAsync();
                 }

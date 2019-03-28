@@ -22,28 +22,29 @@ namespace BankerBot.Commands
 			_sheetsService = sheets;
 		}
 
-        [Command("ECP")]
-        public async Task CurrentECP()
-        {
-            // Get User
-            var user = (IGuildUser)Context.Message.Author;
-            await CurrentCheckpoints(GetCharacterName(user));
-        }
+        //[Command("ECP")]
+        //public async Task CurrentECP()
+        //{
+        //    // Get User
+        //    var user = (IGuildUser)Context.Message.Author;
+        //    await CurrentCheckpoints(GetCharacterName(user));
+        //}
 
-        [Command("ECP")]
-        public async Task CurrentECP(SocketGuildUser user)
-        {
-            await CurrentCheckpoints(GetCharacterName(user));
-        }
+        //[Command("ECP")]
+        //public async Task CurrentECP(SocketGuildUser user)
+        //{
+        //    await CurrentCheckpoints(GetCharacterName(user));
+        //}
 
-        [Command("ECP")]
-        public async Task CurrentECP(string characterName)
-        {
-            await CurrentCheckpoints(characterName);
-        }
+        //[Command("ECP")]
+        //public async Task CurrentECP(string characterName)
+        //{
+        //    await CurrentCheckpoints(characterName);
+        //}
 
         [Command("Checkpoints")]
-        public async Task CurrentCheckpoints(string characterName)
+		[Alias("ECP")]
+		public async Task CurrentCheckpoints(string characterName)
         {
             // Read from Sheet
             SpreadsheetsResource.ValuesResource.GetRequest request =
@@ -62,7 +63,8 @@ namespace BankerBot.Commands
         }
 
         [Command("Checkpoints")]
-        public async Task CurrentCheckpoints()
+		[Alias("ECP")]
+		public async Task CurrentCheckpoints()
         {
             // Get User
             var user = (IGuildUser)Context.Message.Author;
@@ -70,18 +72,21 @@ namespace BankerBot.Commands
         }
 
         [Command("Checkpoints")]
-        public async Task CurrentCheckpoints(SocketGuildUser user)
+		[Alias("ECP")]
+		public async Task CurrentCheckpoints(SocketGuildUser user)
         {
             await CurrentCheckpoints(GetCharacterName(user));
         }
 
         [Command("UpdateCheckpoints")]
+		[Alias("UpdateECP")]
 		public async Task UpdateCheckpoints(SocketGuildUser user, int checkpoints, [Remainder]string note = "")
 		{
 			await UpdateCheckpoints(GetCharacterName(user.Nickname), checkpoints, note);
 		}
 
 		[Command("UpdateCheckpoints")]
+		[Alias("UpdateECP")]
 		public async Task UpdateCheckpoints(string character, int checkpoints, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
