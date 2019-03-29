@@ -125,7 +125,7 @@ namespace BankerBot.Commands
 			string valueName =
 				columnIndex == Convert.ToInt32(ConfigurationManager.AppSettings["GoldColumn"]) ? "gp" :
 				columnIndex == Convert.ToInt32(ConfigurationManager.AppSettings["CheckpointColumn"]) ? "ECP" :
-				columnIndex == Convert.ToInt32(ConfigurationManager.AppSettings["LootpointColumn"]) ? "Lotpoints" :
+				columnIndex == Convert.ToInt32(ConfigurationManager.AppSettings["LootpointColumn"]) ? "Lootpoints" :
 				columnIndex == Convert.ToInt32(ConfigurationManager.AppSettings["EssenceColumn"]) ? "Essence" :
 				columnIndex == Convert.ToInt32(ConfigurationManager.AppSettings["ScrapColumn"]) ? "scrap" :
 				"";
