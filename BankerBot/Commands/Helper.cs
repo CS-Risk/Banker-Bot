@@ -25,6 +25,12 @@ namespace BankerBot.Commands
             await ReplyAsync("Godfall Logbook: <" + ConfigurationManager.AppSettings["logbookUrl"] + ">");
         }
 
+        [Command("Calendar")]
+        public async Task Calendar()
+        {
+            await ReplyAsync("Godfall Calendar: <" + ConfigurationManager.AppSettings["calendarUrl"] + ">");
+        }
+
         [Command("Character")]
         public async Task Character()
         {
