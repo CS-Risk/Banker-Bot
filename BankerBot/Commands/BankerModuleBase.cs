@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Google.Apis.Calendar.v3;
 
 namespace BankerBot.Commands
 {
@@ -21,6 +22,7 @@ namespace BankerBot.Commands
 		protected const string _characterListRange = "'Character List'!A2:O";
 
 		protected SheetsService _sheetsService;
+		protected CalendarService _calendarService;
 
 		protected async Task<IList<Object>> CreateRow(IGuildUser user, string charcterName = "", string tier = "", string checkpoints = "", string lootpoints = "", string gold = "", string essence = "", string scrap = "", string note = "", string resurected = "", bool validateName = true)
 		{

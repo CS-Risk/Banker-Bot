@@ -4,6 +4,8 @@ using Discord.WebSocket;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
+using Google.Apis.Calendar.v3;
+using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Util.Store;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -24,8 +26,8 @@ namespace BankerBot
         private string _token = "NDkwMTc1OTI0MjI3Mjc2ODAx.Dn1frg.d0eoR5GvOgqku778imX-AqF823g";
         private readonly char prefix = ConfigurationManager.AppSettings["prefix"].ToCharArray()[0];
 
-        static string[] Scopes = { SheetsService.Scope.Spreadsheets };
-        static string ApplicationName = "Google Sheets API .NET Quickstart";
+        static string[] Scopes = { SheetsService.Scope.Spreadsheets, CalendarService.Scope.Calendar };
+        static string ApplicationName = "Bankerbot";
 
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
@@ -76,10 +78,18 @@ namespace BankerBot
                 ApplicationName = ApplicationName,
             });
 
+			var calendarService = new CalendarService(new BaseClientService.Initializer()
+			{
+				HttpClientInitializer = credential,
+				ApplicationName = ApplicationName,
+			});
+
+
+
             // Repeat this for all the service classes and other dependencies that your commands might need.
             //_map.AddSingleton());
-
             _map.AddSingleton(sheetsService);
+			_map.AddSingleton(calendarService);
 
             // When all your required services are in the collection, build the container.
             // Tip: There's an overload taking in a 'validateScopes' bool to make sure
