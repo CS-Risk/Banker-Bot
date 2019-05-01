@@ -132,6 +132,7 @@ namespace BankerBot
 								"Parameter count does not match any command's.");
 							break;
 						case CommandError.UnknownCommand:
+							if (msg.Content != prefix.ToString())
 							await context.Channel.SendMessageAsync(
 								"Command not recognized.");
 							break;
