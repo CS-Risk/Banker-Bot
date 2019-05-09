@@ -23,6 +23,7 @@ namespace BankerBot.Commands
 		}
 
 		[Command("Lootpoints")]
+		[Alias("LP")]
 		public async Task CurrentLootpoints()
 		{
 			// Get User
@@ -31,18 +32,21 @@ namespace BankerBot.Commands
 		}
 
 		[Command("Lootpoints")]
+		[Alias("LP")]
 		public async Task CurrentLootpoints(SocketGuildUser user)
 		{
 			await CurrentLootpoints(GetCharacterName(user));
 		}
 
 		[Command("Lootpoints")]
+		[Alias("LP")]
 		public async Task CurrentLootpoints(string characterName)
 		{
 			await ReplyWithCharacterRecordField(characterName, columnIndex);
 		}		
 
 		[Command("SpendLootpoints")]
+		[Alias("SpendLP")]
 		public async Task SpendLootpoints(decimal amount, [Remainder]string note = "")
 		{
 			// Get User
@@ -64,6 +68,7 @@ namespace BankerBot.Commands
         }
 
 		[Command("UpdateLootpoints")]
+		[Alias("UpdateLP")]
 		public async Task UpdateLootpoints(SocketGuildUser user, int lootpoints, [Remainder]string note = "")
 		{
 			await UpdateLootpoints(GetCharacterName(user.Nickname), lootpoints, note);
