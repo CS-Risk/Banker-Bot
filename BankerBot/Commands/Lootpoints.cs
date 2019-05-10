@@ -74,6 +74,8 @@ namespace BankerBot.Commands
 			await UpdateLootpoints(GetCharacterName(user.Nickname), lootpoints, note);
 		}
 
+		[Command("UpdateLootpoints")]
+		[Alias("UpdateLP")]
 		public async Task UpdateLootpoints(string character, int lootpoints, [Remainder]string note = "")
 		{
 			var user = (IGuildUser)Context.Message.Author;
